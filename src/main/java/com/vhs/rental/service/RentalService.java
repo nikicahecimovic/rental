@@ -1,5 +1,7 @@
 package com.vhs.rental.service;
 
+import com.vhs.rental.exception.RentalNotFoundException;
+import com.vhs.rental.exception.VhsNotAvailableForRentException;
 import com.vhs.rental.model.Rental;
 import com.vhs.rental.model.User;
 import com.vhs.rental.model.Vhs;
@@ -9,6 +11,7 @@ import com.vhs.rental.repository.VhsRepository;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,7 +39,7 @@ public class RentalService {
         return rentalRepository.findAll();
     }
 
-    public Rental rentVhs(Long userId, Long vhsId){
+    public Rental rentVhs(Long userId, Long vhsId) throws VhsNotAvailableForRentException {
         Rental rental = new Rental();
         Vhs vhs = vhsRepository.findByVhsId(vhsId);
         if (vhs.isAvailableForRent()) {
@@ -48,13 +51,16 @@ public class RentalService {
             rental.setVhsRented(vhs);
             rentalRepository.save(rental);
         } else {
-            throw new IllegalStateException("This VHS is not available for rent");
+            throw new VhsNotAvailableForRentException("This VHS is not available for rent");
         }
         return rental;
     }
 
-    public Rental returnVhs(Long rentalId){
+    public Rental returnVhs(Long rentalId) throws RentalNotFoundException {
         Rental rental = rentalRepository.findByRentalId(rentalId);
+        if (rental == null) {
+            throw new RentalNotFoundException("Rental with id " + rentalId + " not found");
+        }
         if (rental.getDateReturned() == null) {
             LocalDate rentEndDate = rental.getEndDate();
             LocalDate returnDate = LocalDate.now();

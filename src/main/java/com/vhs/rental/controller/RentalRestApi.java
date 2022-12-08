@@ -1,5 +1,7 @@
 package com.vhs.rental.controller;
 
+import com.vhs.rental.exception.RentalNotFoundException;
+import com.vhs.rental.exception.VhsNotAvailableForRentException;
 import com.vhs.rental.model.Rental;
 import com.vhs.rental.model.User;
 import com.vhs.rental.model.Vhs;
@@ -27,13 +29,13 @@ public class RentalRestApi {
     }
 
     @PostMapping(value = "/rent/{userId}/{vhsId}")
-    public Rental rentVhs(@PathVariable Long userId, @PathVariable Long vhsId){
+    public Rental rentVhs(@PathVariable Long userId, @PathVariable Long vhsId) throws VhsNotAvailableForRentException {
         log.info("POST Rent Vhs");
         return rentalService.rentVhs(userId, vhsId);
     }
 
     @PutMapping(value = "/return/{rentalId}")
-    public Rental returnVhs(@PathVariable Long rentalId){
+    public Rental returnVhs(@PathVariable Long rentalId) throws RentalNotFoundException {
         log.info("PUT Return Vhs");
         return rentalService.returnVhs(rentalId);
     }
