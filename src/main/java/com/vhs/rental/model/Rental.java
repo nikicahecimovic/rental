@@ -2,15 +2,14 @@ package com.vhs.rental.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Rental {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
-    private Long id;
+    private Long rentalId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
@@ -24,22 +23,24 @@ public class Rental {
 
     @Column
     @NotNull(message = "Start date cannot be null!")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column
     @NotNull(message = "End date cannot be null!")
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column
-    @NotNull(message = "Date returned cannot be null!")
-    private Date dateReturned;
+    private LocalDate dateReturned;
 
-    public Long getId() {
-        return id;
+    @Column
+    private Integer lateCost;
+
+    public Long getRentalId() {
+        return rentalId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRentalId(Long rentalId) {
+        this.rentalId = rentalId;
     }
 
     public User getUserRented() {
@@ -58,27 +59,35 @@ public class Rental {
         this.vhsRented = vhsRented;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public Date getDateReturned() {
+    public LocalDate getDateReturned() {
         return dateReturned;
     }
 
-    public void setDateReturned(Date dateReturned) {
+    public void setDateReturned(LocalDate dateReturned) {
         this.dateReturned = dateReturned;
+    }
+
+    public Integer getLateCost() {
+        return lateCost;
+    }
+
+    public void setLateCost(Integer lateCost) {
+        this.lateCost = lateCost;
     }
 }

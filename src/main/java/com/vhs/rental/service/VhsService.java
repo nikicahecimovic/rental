@@ -22,8 +22,8 @@ public class VhsService {
     }
 
     public Vhs getVhsById(Long id){
-        return vhsRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException(String.format("No VHS found with ID = %d", id)));
+        System.out.println(vhsRepository.findByVhsId(id));
+        return vhsRepository.findByVhsId(id);
     }
 
     public void addVhs(Vhs vhs){

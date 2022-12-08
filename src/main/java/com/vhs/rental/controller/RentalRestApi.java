@@ -1,15 +1,15 @@
 package com.vhs.rental.controller;
 
 import com.vhs.rental.model.Rental;
+import com.vhs.rental.model.User;
 import com.vhs.rental.model.Vhs;
 import com.vhs.rental.service.RentalService;
 import com.vhs.rental.service.VhsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @Slf4j
@@ -24,5 +24,17 @@ public class RentalRestApi {
     public List<Rental> getAll(){
         log.info("GET All Vhs'");
         return rentalService.getAllRentals();
+    }
+
+    @PostMapping(value = "/rent/{userId}/{vhsId}")
+    public Rental rentVhs(@PathVariable Long userId, @PathVariable Long vhsId){
+        log.info("POST Rent Vhs");
+        return rentalService.rentVhs(userId, vhsId);
+    }
+
+    @PutMapping(value = "/return/{rentalId}")
+    public Rental returnVhs(@PathVariable Long rentalId){
+        log.info("PUT Return Vhs");
+        return rentalService.returnVhs(rentalId);
     }
 }

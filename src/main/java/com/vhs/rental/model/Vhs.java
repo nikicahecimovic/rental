@@ -8,7 +8,7 @@ public class Vhs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long vhsId;
 
     @Column
     @NotNull(message = "Vhs name cannot be null!")
@@ -19,11 +19,11 @@ public class Vhs {
     private boolean isAvailableForRent;
 
     public Long getId() {
-        return id;
+        return vhsId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long vhsId) {
+        this.vhsId = vhsId;
     }
 
     public String getName() {
