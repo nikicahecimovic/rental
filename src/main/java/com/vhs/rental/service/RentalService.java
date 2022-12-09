@@ -2,6 +2,8 @@ package com.vhs.rental.service;
 
 import com.vhs.rental.exception.RentalNotFoundException;
 import com.vhs.rental.exception.VhsNotAvailableForRentException;
+import com.vhs.rental.exception.VhsNotFoundException;
+import com.vhs.rental.form.RentalForm;
 import com.vhs.rental.model.Rental;
 import com.vhs.rental.model.User;
 import com.vhs.rental.model.Vhs;
@@ -39,9 +41,27 @@ public class RentalService {
         return rentalRepository.findAll();
     }
 
-    public Rental rentVhs(Long userId, Long vhsId) throws VhsNotAvailableForRentException {
+    public Rental editRental(Long id, RentalForm rentalForm) throws RentalNotFoundException, VhsNotAvailableForRentException {
+        Rental rental = rentalRepository.findById(id)
+                .orElseThrow(() -> new RentalNotFoundException("Rental not found with ID: " + id));
+
+        rental.setUserRented(rentalForm.getUser());
+        rental.setVhsRented(rentalForm.getVhs());
+        rental.setStartDate(rentalForm.getStartDate());
+        rental.setEndDate(rentalForm.getEndDate());
+
+        if (!rentalForm.getVhs().isAvailableForRent()) {
+            throw new VhsNotAvailableForRentException("VHS is not available");
+        }
+        return rentalRepository.save(rental);
+    }
+
+    public Rental rentVhs(Long userId, Long vhsId) throws VhsNotAvailableForRentException, VhsNotFoundException {
         Rental rental = new Rental();
         Vhs vhs = vhsRepository.findByVhsId(vhsId);
+        if (vhs == null) {
+            throw new VhsNotFoundException("Vhs with id " + vhsId + " not found");
+        }
         if (vhs.isAvailableForRent()) {
             vhs.setAvailableForRent(false);
             User user = userRepository.findByUserId(userId);

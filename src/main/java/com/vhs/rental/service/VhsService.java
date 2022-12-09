@@ -1,5 +1,7 @@
 package com.vhs.rental.service;
 
+import com.vhs.rental.exception.VhsNotFoundException;
+import com.vhs.rental.form.VhsForm;
 import com.vhs.rental.model.Vhs;
 import com.vhs.rental.repository.VhsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,10 @@ public class VhsService {
         return vhsRepository.findByVhsId(id);
     }
 
-    public void addVhs(Vhs vhs){
+    public void addVhs(VhsForm vhsForm){
+        Vhs vhs = new Vhs();
+        vhs.setName(vhsForm.getName());
+        vhs.setAvailableForRent(vhsForm.isAvailableForRent());
         vhsRepository.save(vhs);
     }
 
@@ -34,12 +39,12 @@ public class VhsService {
         vhsRepository.deleteById(id);
     }
 
-    public void editVhs(Long id, Vhs vhs){
+    public void editVhs(Long id, VhsForm vhsForm) throws VhsNotFoundException {
         Vhs oldVhs = vhsRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException(String.format("No VHS found with ID = %d", id)));
+                .orElseThrow(() -> new VhsNotFoundException(String.format("No VHS found with ID = %d", id)));
 
-        oldVhs.setName(vhs.getName());
-        oldVhs.setAvailableForRent(vhs.isAvailableForRent());
+        oldVhs.setName(vhsForm.getName());
+        oldVhs.setAvailableForRent(vhsForm.isAvailableForRent());
         vhsRepository.save(oldVhs);
     }
 }

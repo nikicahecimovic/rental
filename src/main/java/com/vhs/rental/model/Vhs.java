@@ -41,4 +41,5 @@ public class Vhs {
     public void setAvailableForRent(boolean availableForRent) {
         isAvailableForRent = availableForRent;
     }
+
 }
