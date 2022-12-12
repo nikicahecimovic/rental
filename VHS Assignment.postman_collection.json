@@ -137,7 +137,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/vhs/getById/2",
+					"raw": "localhost:8080/api/vhs/getById/3",
 					"host": [
 						"localhost"
 					],
@@ -353,7 +353,7 @@
 				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/rental/return/1",
+					"raw": "localhost:8080/api/rental/return/2",
 					"host": [
 						"localhost"
 					],
