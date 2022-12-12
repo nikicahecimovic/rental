@@ -1,28 +1,17 @@
 package com.vhs.rental.form;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotNull;
 
+@Getter
+@Setter
 public class VhsForm {
 
     @NotNull
     String name;
 
-    @NotNull
-    boolean isAvailableForRent;
+    boolean AvailableForRent;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isAvailableForRent() {
-        return isAvailableForRent;
-    }
-
-    public void setAvailableForRent(boolean availableForRent) {
-        isAvailableForRent = availableForRent;
-    }
 }

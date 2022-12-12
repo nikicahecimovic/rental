@@ -6,6 +6,7 @@ import com.vhs.rental.model.Vhs;
 import com.vhs.rental.service.VhsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +28,10 @@ public class VhsController {
     }
 
     @GetMapping(value = "/getById/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Vhs getById(@PathVariable Long id){
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<Vhs> getById(@PathVariable Long id) throws VhsNotFoundException {
         log.info("GET Vhs by id");
-        return vhsService.getVhsById(id);
+        return ResponseEntity.ok(vhsService.getVhsById(id));
     }
 
     @PostMapping(value = "/add")

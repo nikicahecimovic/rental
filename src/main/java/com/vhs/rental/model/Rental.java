@@ -1,10 +1,15 @@
 package com.vhs.rental.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
 public class Rental {
 
     @Id
@@ -35,59 +40,4 @@ public class Rental {
     @Column
     private Integer lateCost;
 
-    public Long getRentalId() {
-        return rentalId;
-    }
-
-    public void setRentalId(Long rentalId) {
-        this.rentalId = rentalId;
-    }
-
-    public User getUserRented() {
-        return userRented;
-    }
-
-    public void setUserRented(User userRented) {
-        this.userRented = userRented;
-    }
-
-    public Vhs getVhsRented() {
-        return vhsRented;
-    }
-
-    public void setVhsRented(Vhs vhsRented) {
-        this.vhsRented = vhsRented;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public LocalDate getDateReturned() {
-        return dateReturned;
-    }
-
-    public void setDateReturned(LocalDate dateReturned) {
-        this.dateReturned = dateReturned;
-    }
-
-    public Integer getLateCost() {
-        return lateCost;
-    }
-
-    public void setLateCost(Integer lateCost) {
-        this.lateCost = lateCost;
-    }
 }

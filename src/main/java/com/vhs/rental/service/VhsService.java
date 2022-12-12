@@ -23,15 +23,15 @@ public class VhsService {
         return vhsRepository.findAll();
     }
 
-    public Vhs getVhsById(Long id){
-        System.out.println(vhsRepository.findByVhsId(id));
-        return vhsRepository.findByVhsId(id);
+    public Vhs getVhsById(Long id) throws VhsNotFoundException {
+        return vhsRepository.findById(id)
+                .orElseThrow(() -> new VhsNotFoundException(String.format("No VHS found with ID = %d", id)));
     }
 
     public void addVhs(VhsForm vhsForm){
         Vhs vhs = new Vhs();
         vhs.setName(vhsForm.getName());
-        vhs.setAvailableForRent(vhsForm.isAvailableForRent());
+        vhs.setAvailableForRent(true);
         vhsRepository.save(vhs);
     }
 
@@ -44,7 +44,6 @@ public class VhsService {
                 .orElseThrow(() -> new VhsNotFoundException(String.format("No VHS found with ID = %d", id)));
 
         oldVhs.setName(vhsForm.getName());
-        oldVhs.setAvailableForRent(vhsForm.isAvailableForRent());
         vhsRepository.save(oldVhs);
     }
 }

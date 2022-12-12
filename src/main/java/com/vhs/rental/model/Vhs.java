@@ -1,9 +1,14 @@
 package com.vhs.rental.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Getter
+@Setter
 public class Vhs {
 
     @Id
@@ -17,29 +22,5 @@ public class Vhs {
     @Column
     @NotNull(message = "Vhs availability cannot be null!")
     private boolean isAvailableForRent;
-
-    public Long getId() {
-        return vhsId;
-    }
-
-    public void setId(Long vhsId) {
-        this.vhsId = vhsId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isAvailableForRent() {
-        return isAvailableForRent;
-    }
-
-    public void setAvailableForRent(boolean availableForRent) {
-        isAvailableForRent = availableForRent;
-    }
 
 }

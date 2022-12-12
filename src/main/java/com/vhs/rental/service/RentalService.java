@@ -41,18 +41,36 @@ public class RentalService {
         return rentalRepository.findAll();
     }
 
-    public Rental editRental(Long id, RentalForm rentalForm) throws RentalNotFoundException, VhsNotAvailableForRentException {
+    public Rental addRental(RentalForm rentalForm) {
+        Rental rental = new Rental();
+        Vhs vhs = vhsRepository.findByVhsId(rentalForm.getVhsId());
+        if (rentalForm.getDateReturned() == null){
+            vhs.setAvailableForRent(false);
+        }
+        rental.setVhsRented(vhs);
+        rental.setUserRented(userRepository.findByUserId(rentalForm.getUserId()));
+        rental.setStartDate(rentalForm.getStartDate());
+        rental.setEndDate(rentalForm.getEndDate());
+        return rentalRepository.save(rental);
+    }
+
+    public void deleteRental(Long id){
+        rentalRepository.deleteById(id);
+    }
+
+    public Rental editRental(Long id, RentalForm rentalForm) throws RentalNotFoundException, VhsNotAvailableForRentException, VhsNotFoundException {
         Rental rental = rentalRepository.findById(id)
                 .orElseThrow(() -> new RentalNotFoundException("Rental not found with ID: " + id));
 
-        rental.setUserRented(rentalForm.getUser());
-        rental.setVhsRented(rentalForm.getVhs());
+        Vhs vhs = vhsRepository.findById(rentalForm.getVhsId())
+                .orElseThrow(() -> new VhsNotFoundException("Vhs not found with ID: " + id));
+        if (rentalForm.getDateReturned() == null){
+            vhs.setAvailableForRent(false);
+        }
+        rental.setUserRented(userRepository.findByUserId(rentalForm.getUserId()));
+        rental.setVhsRented(vhs);
         rental.setStartDate(rentalForm.getStartDate());
         rental.setEndDate(rentalForm.getEndDate());
-
-        if (!rentalForm.getVhs().isAvailableForRent()) {
-            throw new VhsNotAvailableForRentException("VHS is not available");
-        }
         return rentalRepository.save(rental);
     }
 

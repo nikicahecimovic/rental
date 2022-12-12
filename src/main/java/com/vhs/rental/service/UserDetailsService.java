@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserDetailsService implements UserDetails {
+
     private String userName;
     private String password;
     private boolean active;
@@ -19,6 +20,7 @@ public class UserDetailsService implements UserDetails {
     public UserDetailsService(User user) {
         this.userName = user.getUsername();
         this.password = user.getPassword();
+        this.active = user.isActive();
         this.authorities = Arrays.stream(user.getRole().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());

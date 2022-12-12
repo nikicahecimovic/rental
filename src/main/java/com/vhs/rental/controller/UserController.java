@@ -1,54 +1,63 @@
-//package com.vhs.rental.controller;
-//
-//import com.vhs.rental.form.UserForm;
-//import com.vhs.rental.model.User;
-//import com.vhs.rental.service.UserService;
-//import org.springframework.security.authentication.BadCredentialsException;
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.Collections;
-//
-//@RestController
-//@RequestMapping("/api/user")
-//public class UserController {
-//
-//    private final UserService userService;
-//    private final BCryptPasswordEncoder passwordEncoder;
-//
-//    public UserController(UserService userService, BCryptPasswordEncoder passwordEncoder) {
-//        this.userService = userService;
-//        this.passwordEncoder = passwordEncoder;
-//    }
-//
-//    @PostMapping("/add")
-//    public User addUser(@RequestBody UserForm userForm){
-//        return userService.save(userForm);
-//    }
-//
-//    @PostMapping("/login")
-//    public void login(@RequestParam String username, @RequestParam String password) {
-//        // Find the user by username
-//        User user = userService.findByUsername(username);
-//        if (user == null) {
-//            throw new BadCredentialsException("Invalid username or password");
-//        }
-//        // Verify the password
-//        boolean passwordMatches = passwordEncoder.matches(password, user.getPassword());
-//        if (!passwordMatches) {
-//            throw new BadCredentialsException("Invalid username or password");
-//        }
-//        // If the password matches, log the user in
-//        SecurityContextHolder.getContext().setAuthentication(
-//                new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(new SimpleGrantedAuthority(user.getRole()))));
-//    }
-//
-//    @PostMapping("/logout")
-//    public void logout() {
-//        SecurityContextHolder.clearContext();
-//    }
-//
-//}
+package com.vhs.rental.controller;
+
+import com.vhs.rental.model.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class UserController implements UserDetails {
+
+    private String username;
+    private String password;
+    private List<GrantedAuthority> authorities;
+    private boolean active;
+
+    public UserController(User user) {
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.active = user.isActive();
+        this.authorities = Arrays.stream(user.getRole().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
+    }
+}
