@@ -35,8 +35,7 @@ public class RentalController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public Rental getRentalById(@PathVariable Long id) throws RentalNotFoundException {
-        return rentalRepository.findById(id)
-                .orElseThrow(() -> new RentalNotFoundException("Rental not found with ID: " + id));
+        return rentalService.getRentalById(id);
     }
 
     @PostMapping(value = "/add")

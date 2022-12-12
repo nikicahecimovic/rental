@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VhsRepository extends JpaRepository<Vhs, Long> {
     Vhs findByVhsId(Long vhsId);
+    Vhs findByName(String name);
 }

@@ -10,10 +10,8 @@ import com.vhs.rental.model.Vhs;
 import com.vhs.rental.repository.RentalRepository;
 import com.vhs.rental.repository.UserRepository;
 import com.vhs.rental.repository.VhsRepository;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -56,6 +54,11 @@ public class RentalService {
 
     public void deleteRental(Long id){
         rentalRepository.deleteById(id);
+    }
+
+    public Rental getRentalById(Long id) throws RentalNotFoundException {
+        return rentalRepository.findById(id)
+                .orElseThrow(() -> new RentalNotFoundException("Rental not found with ID: " + id));
     }
 
     public Rental editRental(Long id, RentalForm rentalForm) throws RentalNotFoundException, VhsNotAvailableForRentException, VhsNotFoundException {
